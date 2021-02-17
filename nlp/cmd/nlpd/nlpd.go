@@ -8,13 +8,20 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
+
 	"github.com/dhiller/go-teach/nlp"
 )
 
 func main() {
 	// routing
-	http.HandleFunc("/api/health", healthHandler)
-	http.HandleFunc("/api/tokenize", handleTokenize)
+
+	r := chi.NewRouter()
+
+	r.Use(middleware.Logger)
+	r.Post("/api/health", healthHandler)
+	r.Get("/api/tokenize", handleTokenize)
 
 	// pre check error before starting service
 	err := healthCheck()
